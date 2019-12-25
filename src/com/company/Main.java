@@ -52,12 +52,7 @@ public class Main {
                 reciever.start();
             }
 
-
-
         }
-
-
-
     }
 }
 
@@ -69,12 +64,12 @@ class Sender extends Thread{
         this.timeOut = timeOut;
     }
     @Override public void run(){
-        synchronized (senderRecieverData){
+
 
             do {
 
-                System.out.println("im fucking sending");
                 try {
+                    System.out.println("im fucking sending");
                     senderRecieverData.clientSocket.send(senderRecieverData.datagramPacket);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -89,7 +84,7 @@ class Sender extends Thread{
 
             } while (!senderRecieverData.recieved);
 
-        }
+
 
     }
 
@@ -106,17 +101,20 @@ class Reciever extends Thread{
     }
     @Override
     public void run(){
-
+        System.out.println("in receiver run");
 
         synchronized (senderRecieverData){
+
 
             System.out.println(" here in lock " );
 
             byte[] buffer = new byte[2];
-            DatagramPacket recieved = new DatagramPacket(buffer,2);
+            DatagramPacket recievedPaket = new DatagramPacket(buffer,2);
                 try {
                     System.out.println(" here trying to recieve " );
-                    senderRecieverData.clientSocket.receive(recieved);
+                    //initialize recievedPaket with server response
+                    senderRecieverData.clientSocket.receive(recievedPaket);
+                    senderRecieverData.recieved = true;
                     System.out.println(" here received " );
 
                 } catch (IOException e) {
@@ -220,10 +218,6 @@ class PacketHolder{
         }
         //seems okey till here
         System.out.println(packetsQ);
-
-
-
-
 
 
     }
